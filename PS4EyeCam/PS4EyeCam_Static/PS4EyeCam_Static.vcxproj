@@ -72,26 +72,26 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\3rdParty\LibUSB\include;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\3rdParty\LibUSB\lib32\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\3rdParty\libusb\libusb;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\3rdParty\libusb\Win32\Debug\lib;$(LibraryPath)</LibraryPath>
     <TargetName>PS4EyeCam</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\3rdParty\LibUSB\include;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\3rdParty\LibUSB\lib64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\3rdParty\libusb\libusb;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\3rdParty\libusb\x64\Debug\lib;$(LibraryPath)</LibraryPath>
     <TargetName>PS4EyeCam</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\3rdParty\LibUSB\include;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\3rdParty\LibUSB\lib32\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\3rdParty\libusb\libusb;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\3rdParty\libusb\Win32\Release\lib;$(LibraryPath)</LibraryPath>
     <TargetName>PS4EyeCam</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\3rdParty\LibUSB\include;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\3rdParty\LibUSB\lib64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\3rdParty\libusb\libusb;$(SolutionDir)..\driver\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\3rdParty\libusb\x64\Release\lib;$(LibraryPath)</LibraryPath>
     <TargetName>PS4EyeCam</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

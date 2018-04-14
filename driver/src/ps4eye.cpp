@@ -405,7 +405,7 @@ namespace ps4eye {
         bool start_transfers(libusb_device_handle *handle, uint32_t curr_frame_size)
         {
             int i;
-            struct libusb_transfer *xfr0;
+            //struct libusb_transfer *xfr0;
 
 
             for(i=0;i<8;i++)
@@ -1016,7 +1016,7 @@ namespace ps4eye {
      */
     uint8_t PS4EYECam::register_read(uint16_t reg,uint8_t subaddr)
     {
-        int i;
+        //int i;
         uint16_t aux;
         uint16_t aux_hi;
         uint16_t aux_lo;
