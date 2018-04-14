@@ -34,39 +34,40 @@
 #ifndef PS4EYECAM_H
 #define PS4EYECAM_H
 
+#include "ps4eye_lib.h"
+
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
-#include "CinderOpenCV.h"
 
 // define shared_ptr in std
 
 #if (defined( _MSC_VER ) && ( _MSC_VER >= 1600 )) || (__cplusplus >= 201103L)
-#include <memory>
+	#include <memory>
 #else
-#include <tr1/memory>
-namespace std {
-    using std::tr1::shared_ptr;
-    using std::tr1::weak_ptr;
-    using std::tr1::static_pointer_cast;
-    using std::tr1::dynamic_pointer_cast;
-    using std::tr1::const_pointer_cast;
-    using std::tr1::enable_shared_from_this;
-}
+	#include <tr1/memory>
+	namespace std {
+		using std::tr1::shared_ptr;
+		using std::tr1::weak_ptr;
+		using std::tr1::static_pointer_cast;
+		using std::tr1::dynamic_pointer_cast;
+		using std::tr1::const_pointer_cast;
+		using std::tr1::enable_shared_from_this;
+	}
 #endif
 
 #include "libusb.h"
 
 #ifndef __STDC_CONSTANT_MACROS
-#  define __STDC_CONSTANT_MACROS
+	#define __STDC_CONSTANT_MACROS
 #endif
 
 #include <stdint.h>
 
-#if defined(DEBUG)
-#define debug(x...) fprintf(stdout,x)
+#if defined(DEBUG) || defined(_DEBUG)
+	#define debug(...) fprintf(stdout, __VA_ARGS__)
 #else
-#define debug(x...)
+	#define debug(...)
 #endif
 
 typedef struct eyeframe
@@ -81,8 +82,7 @@ typedef struct eyeframe
 }eyeframe;
 
 namespace ps4eye {
-
-    class PS4EYECam
+    class PS4EYE_API PS4EYECam
     {
     public:
         typedef std::shared_ptr<PS4EYECam> PS4EYERef;
@@ -92,12 +92,8 @@ namespace ps4eye {
         std::string  firmware_path;
         int rightflag;
        
-
-
-
         PS4EYECam(libusb_device *device, bool firmware_check);
         ~PS4EYECam();
-
 
         bool init(uint32_t width, uint32_t height, uint8_t desiredFrameRate);
         bool init(uint8_t initmode, uint8_t desiredFrameRate);
@@ -105,7 +101,6 @@ namespace ps4eye {
         void start();
         void stop();
         void shutdown();
-
 
         //dump functions from lsusb.c
         void dump_endpoint_comp(const struct libusb_ss_endpoint_companion_descriptor *ep_comp);
@@ -128,7 +123,6 @@ namespace ps4eye {
 
       //  const uint8_t* getLastVideoFramePointer();
         //const uint8_t* getLastDepthFramePointer();
-
 
         uint32_t getWidth() const { return frame_width; }
         uint32_t getHeight() const { return frame_height; }
@@ -156,8 +150,6 @@ namespace ps4eye {
         int uvc_get_power_line_frequency(uint8_t* power_line_frequency, uint8_t req_code);
         int uvc_set_power_line_frequency(uint8_t power_line_frequency);
 
-
-
         //different chips operations
         bool read_sensor_id(uint8_t n);
         void set_led_on();
@@ -172,7 +164,6 @@ namespace ps4eye {
         void dump_sensor_video_mode(uint8_t n);
         void dump_sensor_generalconf(uint8_t n);
         void check_ff71();
-
 
     private:
         bool controlTransferReturned;
@@ -193,22 +184,17 @@ namespace ps4eye {
 
         std::shared_ptr<class URBDesc> urb;
 
-
         PS4EYECam(const PS4EYECam&);
         void operator=(const PS4EYECam&);
-
 
         void release();
 
         bool is_streaming;
 
-
         std::shared_ptr<class USBMgr> mgrPtr;
 
         static bool devicesEnumerated;
         static std::vector<PS4EYERef> devices;
-
-
 
         //usb stuff
         libusb_device *device_;
@@ -230,7 +216,6 @@ namespace ps4eye {
         void register_write(uint16_t reg, uint8_t val,uint8_t subaddr);
         uint8_t register_read(uint16_t reg,uint8_t subaddr);
 
-
         void submitAndWait_controlTransfer(uint8_t bmRequestType, uint8_t bRequest, uint16_t wValue, uint16_t wIndex, uint16_t wLength, uint8_t *buffer);
 
         void submit_controlTransfer(uint8_t bmRequestType, uint8_t bRequest, uint16_t wValue,uint16_t wIndex, uint16_t wLength, uint8_t*buffer);
@@ -240,7 +225,6 @@ namespace ps4eye {
         
         bool open_usb();
         void close_usb();
-        
     };
 }// namespace
 

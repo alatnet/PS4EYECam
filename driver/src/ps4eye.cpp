@@ -31,13 +31,12 @@
  *
  */
 
-#include <algorithm>
 #include "ps4eye.h"
 #include "ps4eye_regs.h"
 #include "libusb.h"
-#include <iostream>
-#include <fstream>
+
 #if defined WIN32 || defined _WIN32 || defined WINCE
+#define NOMINMAX
 #include <windows.h>
 #else
 #include <sys/time.h>
@@ -48,11 +47,20 @@
 #endif
 #endif
 
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <thread>
+#include <chrono>
+
 #define CHUNK_SIZE 512
 
 using namespace std;
 
 namespace ps4eye {
+
+#define sleep_millisecond(x) std::this_thread::sleep_for(std::chrono::milliseconds(x))
+#define sleep_microsecond(x) std::this_thread::sleep_for(std::chrono::microseconds(x))
 
     //defines and uvc types from libuvc
     /** Converts an unaligned four-byte little-endian integer into an int32 */
@@ -315,7 +323,7 @@ namespace ps4eye {
     class URBDesc
     {
     public:
-        URBDesc(uint8 mode):num_transfers(0), last_packet_type(DISCARD_PACKET), last_pts(0), last_fid(0)
+        URBDesc(uint8_t mode):num_transfers(0), last_packet_type(DISCARD_PACKET), last_pts(0), last_fid(0)
         {
             is_streaming=false;
 
@@ -525,7 +533,7 @@ namespace ps4eye {
             payload_len =49152;// 49152; //49152*8; // isoc superspeed usb transfer
 
             do {
-                len = std::min(remaining_len, payload_len);
+                len = (std::min)(remaining_len, payload_len);
 
                 /* Payloads are prefixed with a UVC-style header.  We
                  consider a frame to start when the FID toggles, or the PTS
@@ -604,7 +612,7 @@ namespace ps4eye {
         uint8_t frame_work_ind;
         uint32_t frame_counter;
         int8_t ff71status;
-        Boolean is_streaming;
+        bool is_streaming;
         double last_frame_time;
     };
 
@@ -793,7 +801,7 @@ namespace ps4eye {
                                       len*4+8,
                                       buffer_out);
 
-        sleep(1);
+		sleep_millisecond(1);
         delete[] buffer_out;
         debug("END MULTIWRITE USB\n");
     }
@@ -871,7 +879,7 @@ namespace ps4eye {
                                       buffer_out);
 
         //sleep(1);
-        usleep(1000);
+		sleep_microsecond(1000);
         delete[] buffer_out;
         debug("END MULTIWRITE USB\n");
     }
@@ -1068,7 +1076,7 @@ namespace ps4eye {
          debug("prein %d: 0x%02x \n",i,buffer_out[i]);
          }*/
 
-        usleep(1000);
+		sleep_microsecond(1000);
 
         /*Receive register to read from subaddr*/
         submitAndWait_controlTransfer(LIBUSB_ENDPOINT_IN|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_RECIPIENT_DEVICE,
@@ -1341,7 +1349,7 @@ namespace ps4eye {
         debug("read sensor_id from sensor %d\n",n);
 
         sensor_id_h=register_read(OV9713_CHIP_ID_HI, n);
-        sleep(1);
+		sleep_millisecond(1);
         sensor_id_l=register_read(OV9713_CHIP_ID_LO, n);
         sensor_id=sensor_id_h<<8|sensor_id_l;
         debug("sensor %d id 0x%04x \n",n,sensor_id);
@@ -1680,7 +1688,7 @@ namespace ps4eye {
         // close urb
         urb->close_transfers();
         is_streaming = false;
-        sleep(1);
+		sleep_millisecond(1);
 
        // urb->is_streaming=false;
 
@@ -1692,7 +1700,7 @@ namespace ps4eye {
     {
         debug("PS4EYECAM shutdown called wait...\n");
         stop();
-        sleep(2);
+		sleep_millisecond(2);
         urb->num_transfers=0;
        // release();
     }
@@ -1718,7 +1726,7 @@ namespace ps4eye {
 
                     debug("i=%d Write register 0xff70 to 01\n",urb->ff71status);
                     multi_register_write(ov580_reg_stream_w1,ARRAY_SIZE(ov580_reg_stream_w1),0xff);
-                    usleep(100);
+					sleep_microsecond(100);
                     val=register_read(0xff71,0xff);
                     debug("i=%d val=%d\n",urb->ff71status,val);
                     urb->ff71status=2;
@@ -1736,7 +1744,7 @@ namespace ps4eye {
 
                     val=register_read(0xff71,0xff);
                     debug("i=%d val=%d\n",urb->ff71status,val);
-                    usleep(100);
+					sleep_microsecond(100);
 
                     val=register_read(0xff71,0xff);
                     debug("i=%d val=%d\n",urb->ff71status,val);
@@ -2554,7 +2562,7 @@ namespace ps4eye {
 	}
     int PS4EYECam::uvc_show_video_mode()
     {
-        uvc_stream_ctrl_t ctrl;
+		uvc_stream_ctrl_t ctrl = {0};
         uint8_t buf[26];
         size_t len=26;
         int err;
@@ -2660,7 +2668,7 @@ namespace ps4eye {
         cout << sal << "Max brightness " << brightness<< endl;
         set_led_on();*/
 
-        usleep(1000);
+		sleep_microsecond(1000);
 
 
         return true;
@@ -2794,7 +2802,7 @@ namespace ps4eye {
                 
                 chunk[8] = 0x5b;
                 submit_controlTransfer(0x40, 0x0, 0x2200, 0x8018, 1, chunk);
-                usleep(1000000);
+				sleep_microsecond(1000000);
                 libusb_cancel_transfer(control_transfer);
                 
                 cout << "Firmware uploaded..." << endl;
