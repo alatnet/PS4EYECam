@@ -182,7 +182,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\driver\src\ps4eye.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="PS4EyeCam_DLL.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

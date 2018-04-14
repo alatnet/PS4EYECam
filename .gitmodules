@@ -1,0 +1,8 @@
+[submodule "SDL2"]
+	path = 3rdParty/SDL2
+	url = https://github.com/spurious/SDL-mirror.git
+	branch = master
+[submodule "libusb"]
+	path = 3rdParty/libusb
+	url = https://github.com/libusb/libusb.git
+	branch = master
